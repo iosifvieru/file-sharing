@@ -4,7 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 from fastapi.responses import StreamingResponse
 
-BUCKET_NAME=os.getenv("BUCKET_NAME", "mybucket")
+BUCKET_NAME = os.getenv("BUCKET_NAME", "mybucket")
 S3_ENDPOINT = os.getenv("S3_ENDPOINT", "localhost:9000")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY", "admin")
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY", "adminStrong")
@@ -25,11 +25,12 @@ def create_bucket(bucket_name):
 
 def upload_to_s3(file, bucket_name):
     try:
+        file.file.seek(0)
         s3.upload_fileobj(file.file, bucket_name, file.filename)
-        return True
+        return file.filename, True
     except ClientError as e:
         print(e)
-        return False
+        return file.filename, False
 
 def download_from_s3(filename, bucket_name):
     try:
