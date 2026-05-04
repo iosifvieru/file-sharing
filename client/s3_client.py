@@ -23,11 +23,13 @@ def create_bucket(bucket_name):
     except ClientError:
         s3.create_bucket(Bucket=bucket_name)
 
-def upload_to_s3(file, bucket_name):
+def upload_to_s3(file, bucket_name, folder:str = "temp"):
     try:
         file.file.seek(0)
-        s3.upload_fileobj(file.file, bucket_name, file.filename)
-        return file.filename, True
+
+        object_key = f"{folder}/{file.filename}"
+        s3.upload_fileobj(file.file, bucket_name, object_key)
+        return object_key, True
     except ClientError as e:
         print(e)
         return file.filename, False

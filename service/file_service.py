@@ -1,6 +1,7 @@
 from fastapi import UploadFile, status, HTTPException
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from client import s3_client
+from uuid import uuid4
 
 def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
     if not files:
@@ -9,9 +10,11 @@ def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
     uploaded = []
     failed = []
 
+    unique_key = uuid4()
+
     with ThreadPoolExecutor(max_workers=min(len(files), 10)) as executor:
         futures = {
-            executor.submit(s3_client.upload_to_s3, file, bucket_name): file 
+            executor.submit(s3_client.upload_to_s3, file, bucket_name, unique_key): file 
             for file in files
         }
         for future in as_completed(futures):
@@ -30,5 +33,6 @@ def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
     
     return {
         "message": "Upload successful",
+        "folder": unique_key,
         "files": uploaded
     }
