@@ -1,9 +1,18 @@
+from os import getenv
 from fastapi import FastAPI
-from controllers import file_controllers
+from contextlib import asynccontextmanager
+from controller import file_controller
+from client import s3_client
 
-app = FastAPI()
+BUCKET_NAME=getenv("BUCKET_NAME", "mybucket")
 
-app.include_router(router=file_controllers.router)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    s3_client.create_bucket(BUCKET_NAME)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+app.include_router(router=file_controller.router)
 
 @app.get("/health")
 async def healthcheck():
