@@ -1,13 +1,12 @@
 from fastapi import APIRouter, HTTPException, status, UploadFile
 from service import file_service
-from os import getenv
+from client import s3_client
 
-BUCKET_NAME=getenv("BUCKET_NAME", "mybucket")
 router = APIRouter()
 
 @router.post("/upload")
 async def upload_file(files: list[UploadFile]):
-    result = file_service.upload_file_to_s3(files, BUCKET_NAME)
+    result = file_service.upload_file_to_s3(files, s3_client.BUCKET_NAME)
     return result
 
 @router.get("/download/:token")

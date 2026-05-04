@@ -4,6 +4,7 @@ import boto3
 from botocore.exceptions import ClientError
 from fastapi.responses import StreamingResponse
 
+BUCKET_NAME=os.getenv("BUCKET_NAME", "mybucket")
 S3_ENDPOINT = os.getenv("S3_ENDPOINT", "localhost:9000")
 S3_ACCESS_KEY = os.getenv("S3_ACCESS_KEY", "admin")
 S3_SECRET_KEY = os.getenv("S3_SECRET_KEY", "adminStrong")
