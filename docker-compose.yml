@@ -19,8 +19,9 @@ services:
     ports:
       - "4566:4566"
     environment:
-      - SERVICES=sns,sqs
+      - SERVICES=sns,sqs,lambda
       - AWS_DEFAULT_REGION=eu-central-1
+      - LAMBDA_EXECUTOR=docker
 
   postgres:
     image: postgres:16
