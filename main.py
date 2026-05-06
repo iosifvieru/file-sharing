@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from controller import file_controller
 from client import s3_client
+from dotenv import load_dotenv
 
 def get_cors_origins() -> list[str]:
     origins = getenv("CORS_ORIGINS", "")
@@ -14,8 +15,8 @@ async def lifespan(app: FastAPI):
     s3_client.create_bucket(s3_client.BUCKET_NAME)
     yield
 
+load_dotenv()
 app = FastAPI(lifespan=lifespan)
-
 
 app.add_middleware(
     CORSMiddleware,
