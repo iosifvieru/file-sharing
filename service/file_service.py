@@ -1,6 +1,6 @@
 from fastapi import UploadFile, status, HTTPException
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from client import s3_client
+from client import s3_client, postgresql_client
 from uuid import uuid4, UUID
 
 MAX_ALLOWED_UPLOAD_SIZE = 2_000_000_000 # bytes
@@ -13,6 +13,10 @@ def get_uploaded_files_size(uploaded_files: list[UploadFile]) -> int:
         file_sizes += file.size
 
     return file_sizes
+
+def create_metadata_records_for_each_file(unique_key, files: list[UploadFile]):
+    for file in files:
+        postgresql_client.create_file_record(unique_key, file.filename, file.size)
 
 def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
     if not files:
@@ -45,7 +49,7 @@ def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
             "failed": failed
         })
     
-    # TO DO -> upload metadata to postgresql
+    create_metadata_records_for_each_file(unique_key, files)
 
     return {
         "message": "Upload successful",
@@ -64,6 +68,8 @@ def download_file_from_s3(uuid: str, filename: str):
     exists = s3_client.check_file_exists(s3_key)
     if not exists:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"File with name {s3_key} not found")
+    
+    postgresql_client.increment_download_number(uuid, filename)
 
     return s3_client.download_from_s3(s3_key, s3_client.BUCKET_NAME)
 
@@ -73,9 +79,7 @@ def get_files_informations(uuid: str):
     except ValueError:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Invalid UUID format")
 
-    result = s3_client.list_files(uuid)
-
-    # TO DO -> get additional metadata about files
+    result = postgresql_client.get_files_by_unique_key(uuid)
 
     return {
         "size": len(result),

@@ -20,13 +20,14 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     op.execute("""
-    CREATE TABLE file_informations(
-        uuid UUID PRIMARY KEY,
+    CREATE TABLE file_informations (
+        id BIGSERIAL PRIMARY KEY,
+        unique_key UUID NOT NULL,
         file_name TEXT NOT NULL,
         file_size_bytes BIGINT,
         download_number INTEGER NOT NULL DEFAULT 0,
         uploaded_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    );           
+    );
     """)
 
 def downgrade() -> None:
