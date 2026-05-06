@@ -16,6 +16,7 @@ def publish_message(message: dict):
     sns.publish(
         TopicArn=SNS_TOPIC_ARN,
         Message=str(message),
+        MessageGroupId="file-sharing"
     )
 
     logger.info(f"Published message: {message}")
