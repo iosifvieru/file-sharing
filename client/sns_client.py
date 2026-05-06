@@ -9,7 +9,7 @@ AWS_ACCESS_KEY = getenv("SNS_ACCESS_KEY", "test")
 AWS_SECRET_KEY = getenv("SNS_SECRET_KEY", "test")
 
 SNS_AWS_REGION = getenv("SNS_AWS_REGION", "eu-central-1")
-SNS_AWS_ENDPOINT_URL = getenv("SNS_AWS_ENDPOINT_URL", "http://localhost:4566")
+SNS_AWS_ENDPOINT_URL = getenv("SNS_AWS_ENDPOINT_URL")
 SNS_TOPIC_ARN = getenv("SNS_TOPIC_ARN", "arn:aws:sns:eu-central-1:000000000000:email-topic")
 
 sns = boto3.client(
