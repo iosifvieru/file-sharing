@@ -2,6 +2,7 @@ from fastapi import UploadFile, status, HTTPException
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from client import s3_client, postgresql_client
 from uuid import uuid4, UUID
+from loguru import logger
 
 MAX_ALLOWED_UPLOAD_SIZE = 2_000_000_000 # bytes
 MAX_ALLOWED_UPLOAD_SIZE_GB = MAX_ALLOWED_UPLOAD_SIZE / 10e8
@@ -51,10 +52,13 @@ def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
     
     create_metadata_records_for_each_file(unique_key, files)
 
+    logger.info(f"Uploaded {len(uploaded)} files successfully.")
+
     return {
         "message": "Upload successful",
         "folder": unique_key,
-        "files": uploaded
+        "files": uploaded,
+        "unique_key": unique_key
     }
 
 def download_file_from_s3(uuid: str, filename: str):

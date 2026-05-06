@@ -4,3 +4,4 @@ fastapi[standard]
 psycopg[binary,pool]
 alembic
 sqlalchemy
+loguru

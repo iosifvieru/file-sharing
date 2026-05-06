@@ -14,6 +14,14 @@ services:
       - minio_data:/data
     restart: unless-stopped
 
+  localstack:
+    image: localstack/localstack:4.14
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sns,sqs
+      - AWS_DEFAULT_REGION=eu-central-1
+
   postgres:
     image: postgres:16
     container_name: postgres
