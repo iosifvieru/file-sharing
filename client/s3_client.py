@@ -8,17 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 BUCKET_NAME = os.getenv("BUCKET_NAME", "mybucket")
-S3_ENDPOINT = os.getenv("S3_ENDPOINT", "http://localhost:9000")
-AWS_ACCESS_KEY = os.getenv("S3_ACCESS_KEY", "admin")
-AWS_SECRET_KEY = os.getenv("S3_SECRET_KEY", "adminStrong")
 
-s3 = boto3.client(
-    "s3",
-    endpoint_url=f"http://{S3_ENDPOINT}",
-    aws_access_key_id=AWS_ACCESS_KEY,
-    aws_secret_access_key=AWS_SECRET_KEY,
-    region_name="us-east-1"
-)
+s3 = boto3.client("s3")
 
 def create_bucket(bucket_name):
     try:
