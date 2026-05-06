@@ -6,7 +6,8 @@ services:
     ports:
       - "80:8000"
     restart: unless-stopped
-  
+    volumes:
+      - ~/.aws/credentials:/root/.aws/credentials:ro
   minio:
     image: minio/minio:latest
     container_name: minio
