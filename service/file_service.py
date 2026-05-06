@@ -45,6 +45,8 @@ def upload_file_to_s3(files: list[UploadFile], bucket_name: str):
             "failed": failed
         })
     
+    # TO DO -> upload metadata to postgresql
+
     return {
         "message": "Upload successful",
         "folder": unique_key,
@@ -72,6 +74,8 @@ def get_files_informations(uuid: str):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Invalid UUID format")
 
     result = s3_client.list_files(uuid)
+
+    # TO DO -> get additional metadata about files
 
     return {
         "size": len(result),
