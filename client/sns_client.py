@@ -5,8 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-SNS_ACCESS_KEY = getenv("SNS_ACCESS_KEY", "test")
-SNS_SECRET_KEY = getenv("SNS_SECRET_KEY", "test")
+AWS_ACCESS_KEY = getenv("SNS_ACCESS_KEY", "test")
+AWS_SECRET_KEY = getenv("SNS_SECRET_KEY", "test")
 
 SNS_AWS_REGION = getenv("SNS_AWS_REGION", "eu-central-1")
 SNS_AWS_ENDPOINT_URL = getenv("SNS_AWS_ENDPOINT_URL", "http://localhost:4566")
@@ -16,8 +16,8 @@ sns = boto3.client(
     "sns",
     region_name=SNS_AWS_REGION,
     endpoint_url=SNS_AWS_ENDPOINT_URL,
-    aws_access_key_id=SNS_ACCESS_KEY,
-    aws_secret_access_key=SNS_SECRET_KEY,
+    aws_access_key_id=AWS_ACCESS_KEY,
+    aws_secret_access_key=AWS_SECRET_KEY,
 )
 
 def publish_message(message: dict):
