@@ -1,6 +1,9 @@
 from os import getenv
 import boto3
 from loguru import logger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 SNS_ACCESS_KEY = getenv("SNS_ACCESS_KEY", "test")
 SNS_SECRET_KEY = getenv("SNS_SECRET_KEY", "test")

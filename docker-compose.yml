@@ -1,5 +1,12 @@
 
 services:
+  filesharing:
+    build: .
+    container_name: fastapi-app
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+  
   minio:
     image: minio/minio:latest
     container_name: minio

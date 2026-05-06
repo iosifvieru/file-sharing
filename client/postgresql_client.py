@@ -1,5 +1,8 @@
 from os import getenv
+from dotenv import load_dotenv
 from psycopg_pool import ConnectionPool
+
+load_dotenv()
 
 POSTGRES_USER = getenv("POSTGRES_USER", "admin")
 POSTGRES_PASSWORD = getenv("POSTGRES_PASSWORD", "password")
