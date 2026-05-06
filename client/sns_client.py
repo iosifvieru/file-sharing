@@ -5,9 +5,12 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+SNS_AWS_REGION = getenv("SNS_AWS_REGION", "eu-central-1")
 SNS_TOPIC_ARN = getenv("SNS_TOPIC_ARN", "arn:aws:sns:eu-central-1:000000000000:email-topic")
 
-sns = boto3.client("sns")
+sns = boto3.client("sns",
+    region_name=SNS_AWS_REGION
+)
 
 def publish_message(message: dict):
     sns.publish(
