@@ -69,7 +69,7 @@ def download_file_from_s3(uuid: str, filename: str):
 
     s3_key = f"{uuid}/{filename}"
 
-    exists = s3_client.check_file_exists(s3_key)
+    exists = s3_client.check_file_exists(s3_key) 
     if not exists:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"File with name {s3_key} not found")
     

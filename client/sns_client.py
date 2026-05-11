@@ -2,6 +2,7 @@ from os import getenv
 import boto3
 from loguru import logger
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ sns = boto3.client("sns",
 def publish_message(message: dict):
     sns.publish(
         TopicArn=SNS_TOPIC_ARN,
-        Message=str(message),
+        Message=json.dumps(message),
         MessageGroupId="file-sharing"
     )
 

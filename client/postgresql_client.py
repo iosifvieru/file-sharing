@@ -12,7 +12,7 @@ POSTGRES_PORT = getenv("POSTGRES_PORT", "5432")
 
 DATABASE_URL = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 
-pool = ConnectionPool(conninfo=DATABASE_URL)
+pool = ConnectionPool(conninfo=DATABASE_URL, kwargs={"sslmode": "require"})
 
 def create_file_record(unique_key, file_name, file_size_bytes):
     with pool.connection() as conn:
@@ -51,7 +51,7 @@ def increment_download_number(unique_key: str, file_name: str):
                 return None
 
             return result[0]  # updated download count
-        
+
 def get_files_by_unique_key(unique_key: str):
     with pool.connection() as conn:
         with conn.cursor() as cur:
