@@ -68,12 +68,15 @@ def download_file_from_s3(uuid: str, filename: str):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Invalid UUID format")
 
     s3_key = f"{uuid}/{filename}"
+    logger.info(f"Download requested: uuid={uuid}, filename={filename}, s3_key={s3_key}")
 
     exists = s3_client.check_file_exists(s3_key) 
+    logger.info(f"s3 exists={exists}, s3_key={s3_key}")
     if not exists:
         raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"File with name {s3_key} not found")
     
-    postgresql_client.increment_download_number(uuid, filename)
+    rows_updated = postgresql_client.increment_download_number(uuid, filename)
+    logger.info(f"Download count update results={rows_updated}, uuid={uuid}, filename={filename}")
 
     return s3_client.download_from_s3(s3_key, s3_client.BUCKET_NAME)
 

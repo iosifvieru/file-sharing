@@ -49,6 +49,8 @@ def increment_download_number(unique_key: str, file_name: str):
 
             if result is None:
                 return None
+            
+            conn.commit()
 
             return result[0]  # updated download count
 
